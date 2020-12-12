@@ -18,7 +18,7 @@ from stylegan2 import pretrained_networks
 
 def _parse_num_range(int_list_or_range):
     """
-    Accept either a comma separated list of numbers 'a,b,c' 
+    Accept either a comma separated list of numbers 'a,b,c'
     or a range 'a-c' and return as a list of ints.
     """
     range_re = re.compile(r'^(\d+)-(\d+)$')
@@ -129,9 +129,9 @@ def generate_images(network_pkl, seeds, truncation_psi, periodogram_generator, m
     help='Algorithm used to compute spectral density.'
 )
 @click.option(
-    '-s', 
-    '--seeds', 
-    type=str, 
+    '-s',
+    '--seeds',
+    type=str,
     help=(
         'Comma-separated list or dash-separated range of network input seeds. '
         'These seeds are mapped onto frequency "bins" for audio. '
@@ -142,7 +142,7 @@ def generate_images(network_pkl, seeds, truncation_psi, periodogram_generator, m
     )
 )
 @click.option(
-    '--truncation-psi', 
+    '--truncation-psi',
     default=0.75,
     help=(
         'Psi value used for StyleGAN\'s truncation trick. '
@@ -152,7 +152,7 @@ def generate_images(network_pkl, seeds, truncation_psi, periodogram_generator, m
     )
 )
 @click.option(
-   '--samples-per-image', 
+   '--samples-per-image',
    default=2048,
    help=(
        'How many samples of audio to use for each generated image. '
@@ -191,6 +191,7 @@ def visualise(jack_client_name, network_pkl, periodogram, seeds, truncation_psi,
 
     root = tk.Tk()
     panel = tk.Label(root)
+    panel.configure(bg='black')
     panel.pack(side='bottom', fill='both', expand='yes')
 
     periodogram_gen = generate_periodogram_from_audio(
