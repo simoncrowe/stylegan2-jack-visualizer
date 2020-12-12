@@ -1,11 +1,11 @@
-## JACK visualiser 
+## StyleGAN2 JACK visualizer
 
-The script `jack_visualiser.py` should allow you to visualise a spectrogram
+The script `visualize.py` should allow you to visualise a spectrogram
 of the output of a JACK client using a trained StyleGAN network of your
 choosing.
 
 
-### Setup 
+### Setup
 First, load the `stylegan2` repository submodule.
 
 ```.sh
@@ -37,7 +37,7 @@ pip install -r requirements.txt
 ```
 
 ### Usage
-The script is a Click CLI and it's `--help` output is below. 
+The script is a Click CLI and it's `--help` output is below.
 ```
 Usage: visualize.py [OPTIONS] JACK_CLIENT_NAME NETWORK_PKL
 Options:
@@ -76,15 +76,15 @@ Options:
 ### Examples
 You'll need to supply two positional arguments: `JACK_CLIENT_NAME` and `NETWORK_PKL`.
 
-In all examples below, the jack client name `SuperCollider` is used. 
-This works if Supercollider's server is running and outputting audio to JACK. 
+In all examples below, the jack client name `SuperCollider` is used.
+This works if Supercollider's server is running and outputting audio to JACK.
 If you're outputting to JACK with something else you can check the client name
 using one of the control applications listed
 [here](https://jackaudio.org/applications/).
 
 The `stylegan2-cat-config-a.pkl` network pkl is used in the first two examples.
-This produces small images and is based on a simple architecture. It is fast but boring. 
-If you want something more sophisticated, try one of the `config-e` or `config-f` networks. 
+This produces small images and is based on a simple architecture. It is fast but boring.
+If you want something more sophisticated, try one of the `config-e` or `config-f` networks.
 You can of course train your own.
 
 In order for the imports within the `stylegan2` submodule to work,
@@ -92,14 +92,14 @@ you'll need to execute this command once before running the script.
 ```.sh
 export PYTHONPATH=stylegan2
 ```
-Along with the two positional arguments, 
+Along with the two positional arguments,
 you'll need to specify a periodogram algorithm using the `--periodogram` option.
 
 #### Simple periodogram
 This is Scipy's basic algorithm which doesn't do much more than apply the fast Fourier transform to the audio.
 The resulting periodogram tends to be quite big, so the script divides it evenly between the seeds.
 
-This will output images for every 4096 samples from Supercollider 
+This will output images for every 4096 samples from Supercollider
 based on the first 128 seeds of the `stylegan2-cat-config-a.pkl` network.
 ```.bash
 python visualize.py SuperCollider gdrive:networks/stylegan2-cat-config-a.pkl \
@@ -120,9 +120,9 @@ Weights:
  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
  0. 0. 0. 0. 0. 0. 0. 0.]
 ```
-If the number of samples in the buffer keeps increasing, 
+If the number of samples in the buffer keeps increasing,
 you need to increase `--samples-per-image`.
-Once there are consistently a small number of samples in the buffer (ideally 0), 
+Once there are consistently a small number of samples in the buffer (ideally 0),
 you should get reasonably low-latency visualisation of your output.
 Every time a new image is displayed, you should see something like the following:
 ```
@@ -167,7 +167,7 @@ Weights:
 
 #### Welch periodogram
 The Welch periodogram uses overlapping frequency bins, which may look smoother.
-This is currently more buggy than the simple periodogram 
+This is currently more buggy than the simple periodogram
 and you may need to tweak the number of seeds to get it to work.
 
 This example will output images based on 32 overlapping frequency bins for some custom seed numbers.
