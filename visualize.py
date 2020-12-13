@@ -142,6 +142,13 @@ def generate_images(network_pkl, seeds, truncation_psi, periodogram_generator, m
     )
 )
 @click.option(
+    '-f',
+    '--seed-file',
+    type=str,
+    help=(
+        "A YAML file containing named lists of seeds and the starting name."
+    )
+@click.option(
     '--truncation-psi',
     default=0.75,
     help=(
@@ -164,7 +171,20 @@ def generate_images(network_pkl, seeds, truncation_psi, periodogram_generator, m
    )
 )
 @click.option('--sample-rate', default=48000, help='JACK sample rate.')
-def visualise(jack_client_name, network_pkl, periodogram, seeds, truncation_psi, samples_per_image, sample_rate):
+def visualise(jack_client_name,
+              network_pkl,
+              periodogram,
+              seeds,
+              seeds_file,
+              truncation_psi,
+              samples_per_image,
+              sample_rate):
+
+    if bool(seeds) == bool(seeds_file):
+        raise ValueError(
+            "Either --seeds, or --seeds-filte must be specified (not both)."
+        )
+
     periodogram_function = PERIODOGRAM_FUNCTION_MAP[periodogram]
     seeds = _parse_num_range(seeds)
 
@@ -175,10 +195,9 @@ def visualise(jack_client_name, network_pkl, periodogram, seeds, truncation_psi,
     external_output_two = client.get_port_by_name(f'{jack_client_name}:out_2')
 
     raw_audio = deque()
-    @client.set_process_callback
-    def process(frame_count):
-        nonlocal raw_audio
 
+    @client.set_process_callback
+    def process_audio(frame_count):
         buffer_one = _unpack_bytes(
             input_one.get_buffer()[:], frame_count
         )
@@ -189,23 +208,30 @@ def visualise(jack_client_name, network_pkl, periodogram, seeds, truncation_psi,
         for sample_one, sample_two in zip(buffer_one, buffer_two):
             raw_audio.appendleft((sample_one, sample_two))
 
+    client.activate()
+    client.connect(external_output_one, input_one)
+    client.connect(external_output_one, input_two)
+
     root = tk.Tk()
     panel = tk.Label(root)
     panel.configure(bg='black')
     panel.pack(side='bottom', fill='both', expand='yes')
 
-    periodogram_gen = generate_periodogram_from_audio(
-        periodogram_function,
-        raw_audio,
-        samples_per_image,
-        sample_rate,
-        len(seeds)
-    )
-    with client:
-        client.connect(external_output_one, input_one)
-        client.connect(external_output_one, input_two)
+    while True:
+        periodogram_generator = generate_periodogram_from_audio(
+            periodogram_function,
+            raw_audio,
+            samples_per_image,
+            sample_rate,
+            len(seeds)
+        )
+        image_generator = generate_images(network_pkl,
+                                          seeds,
+                                          truncation_psi,
+                                          periodogram_generator)
+        reset = False
 
-        for image_array in generate_images(network_pkl, seeds, truncation_psi, periodogram_gen):
+        for image_array in image_generator:
             image = Image.fromarray(image_array, 'RGB')
             gui_image = ImageTk.PhotoImage(image)
 
@@ -216,7 +242,9 @@ def visualise(jack_client_name, network_pkl, periodogram, seeds, truncation_psi,
 
             root.update()
 
+            if reset:
+                break
+
 
 if __name__ == '__main__':
     visualise()
-
