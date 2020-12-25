@@ -1,7 +1,7 @@
-## StyleGAN2 JACK visualizer
+## StyleGAN 2 JACK visualizer
 
 The script `visualize.py` should allow you to visualise a spectrogram
-of the output of a JACK client using a trained StyleGAN network of your
+of the output of a JACK client using a trained StyleGAN 2 network of your
 choosing.
 
 
@@ -13,7 +13,7 @@ git submodule init
 ```
 
 Now you need to install the dependencies for StyleGAN 2. I've successfully
-set StyleGAN 2 up on Ubuntu 18.
+set StyleGAN 2 up on Ubuntu 18, so that's the OS I'd recommend.
 
 You need to install the following on your system:
  - Nvidia drivers (>= 410.48)
@@ -26,7 +26,7 @@ for more details.
 
 To display the image, you'll also need a system-level package for Tkinter:
 
-```
+```.sh
 sudo apt install python3-tk
 ```
 
@@ -38,6 +38,7 @@ pip install -r requirements.txt
 
 ### Usage
 The script is a Click CLI and it's `--help` output is below.
+
 ```
 Usage: visualize.py [OPTIONS] JACK_CLIENT_NAME NETWORK_PKL
 
@@ -92,13 +93,14 @@ using one of the control applications listed
 [here](https://jackaudio.org/applications/).
 
 The `stylegan2-cat-config-a.pkl` network pkl is used in most examples.
-This produces small images and is based on a simple architecture.
-It is fast but boring.
+It should automatically download from Google Drive.
+While fast, this network is a bit boring.
 If you want something more sophisticated,
-try one of the `config-e` or `config-f` networks.
+try one of the `config-e` or `config-f` networks in the
+[StyleGAN2 Google Drive](https://drive.google.com/drive/folders/1yanUI9m4b4PWzR0eurKNq6JR1Bbfbh6L).
 You can of course train your own.
 
-In order for the imports within the `stylegan2` submodule to work,
+For the imports within the `stylegan2` submodule to work,
 you'll need to execute this command once before running the script.
 ```.sh
 export PYTHONPATH=stylegan2
@@ -110,9 +112,10 @@ you'll need to specify a periodogram algorithm using the `--periodogram` option.
 The simplest approach is to pass a list of seeds and seed ranges
 using the `--seeds-list` option.
 
-This command will output images for every 4096 samples from Supercollider
-based on the first 128 seeds of the `stylegan2-cat-config-a.pkl` network.
-```.bash
+This command will output an image from the `stylegan2-cat-config-a.pkl`
+network for every 4096 samples from Supercollider.
+
+```.sh
 python visualize.py SuperCollider gdrive:networks/stylegan2-cat-config-a.pkl \
     --periodogram simple --samples-per-image 4096 \
     --seeds-list '0-64, 112, 224, 512-532'
@@ -157,7 +160,7 @@ If this doesn't happen, you need to increase `--samples-per-image`.
 
 Once there are consistently a small number of samples in the buffer
 (ideally 0), you should get reasonably low-latency visualisation
-of your output.
+of your audio output.
 
 #### Multiple seeds lists from YAML files
 
@@ -165,6 +168,7 @@ If you want to switch between multiple lists of seeds, you can pass
 the location of a YAML file using the `--seeds-file-option`.
 
 This example illustrates the format:
+
 ```.yaml
 starting_name: "nice cats"
 seeds:
@@ -184,11 +188,13 @@ python visualize.py SuperCollider gdrive:networks/stylegan2-cat-config-a.pkl \
     --seeds-file ~/ai/jack-visualizer-seeds/cat-test.yaml
 ```
 
-Once the StyleGAN2 Jack Visualizer window launches, you should
-be able to switch to the second seed list by typing _scary cats_
-and pressing ENTER. You can then switch back by typing _nice
-cats_ followed by ENTER as before. If you make a mistake, you
-can erase the last charactar with the BACKSPACE key.
+Once the StyleGAN2 Jack Visualizer window launches,
+you should be able to switch to the second seed list.
+To do this, hover your cursor over the StyleGAN2 Jack Visualizer window,
+type _scary cats_ and press ENTER.
+You can then switch back by typing _nice cats_ followed by ENTER as before.
+If you make a mistake,
+you can erase the last charactar with the BACKSPACE key.
 
 The text you type is deliberately not displayed in the GUI
 for aesthetic reasons.
@@ -197,7 +203,8 @@ for aesthetic reasons.
 Just specify a path to a local `.pkl` file rather than using the `gdrive` prefix.
 
 This example won't work unless you have the network, but should serve to illustrate:
-```.bash
+
+```.sh
 python visualize.py SuperCollider ~/ai/networks/glitch-009084.pkl \
     --samples-per-image 5120 -p simple \
     --seeds '1137,1028,1139,1285,1776,2051,936,915,848,838,812,791,
@@ -213,7 +220,7 @@ and you may need to tweak the number of seeds to get it to work.
 
 This example will output images based on 32 overlapping frequency bins for some custom seed numbers.
 
-```.bash
+```.sh
 python visualize.py SuperCollider gdrive:networks/stylegan2-cat-config-a.pkl \
     --periodogram welch --samples-per-image 4096 \
     --seeds '0,1,1,2,3,5,8,13,21,34,55,89,144,233,377,610,
