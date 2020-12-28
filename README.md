@@ -36,6 +36,18 @@ Once you have the system-level requirements, you'll need some pip packages:
 pip install -r requirements.txt
 ```
 
+Finally, you'll need `tensorflow-gpu`.
+
+```.sh
+pip install tensorflow-gpu==1.15
+```
+
+If you have issues with version 1.15, please try:
+
+```.sh
+pip install tensorflow-gpu==1.14
+```
+
 ### Usage
 The script is a Click CLI and it's `--help` output is below.
 
