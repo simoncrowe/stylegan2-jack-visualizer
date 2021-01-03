@@ -39,15 +39,16 @@ pip install -r requirements.txt
 ```
 
 Finally, you'll need `tensorflow-gpu`.
-
-```.sh
-pip install tensorflow-gpu==1.15
-```
-
-If you have issues with version 1.15, please try:
+Version 1.14 is recommended by the StyleGAN 2 developers.
 
 ```.sh
 pip install tensorflow-gpu==1.14
+```
+
+If you have issues with version 1.14, please try:
+
+```.sh
+pip install tensorflow-gpu==1.15
 ```
 
 ### Usage
