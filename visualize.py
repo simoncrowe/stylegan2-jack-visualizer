@@ -244,7 +244,7 @@ def visualise(jack_client_name,
         with open(seeds_file, "r") as fileobj:
             config = yaml.load(fileobj)
         seeds = {
-            name: list(_cast_and_unpack(seeds_list))
+            str(name): list(_cast_and_unpack(seeds_list))
             for name, seeds_list in config["seeds"].items()
         }
 
@@ -280,7 +280,7 @@ def visualise(jack_client_name,
     panel.configure(bg="black")
     panel.pack(side="bottom", fill="both", expand="yes")
 
-    seeds_name = config.get("starting_name", next(iter(seeds.keys())))
+    seeds_name = str(config.get("starting_name", next(iter(seeds.keys()))))
     reset = False
     chars = []
 
