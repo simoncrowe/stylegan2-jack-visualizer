@@ -4,7 +4,9 @@ The script `visualize.py` should allow you to visualise a spectrogram
 of the output of a JACK client using a trained StyleGAN 2 network of your
 choosing.
 
-
+![Screenshot of the script running on a 512px network and tidal cycles](https://raw.githubusercontent.com/simoncrowe/stylegan2-jack-visualizer/main/screenshot.png)
+The screenshot above shows the script used to visualise Tidal Cycles audio output
+with a network trained on glitch art images.
 ### Setup
 First, load the `stylegan2` repository submodule.
 
