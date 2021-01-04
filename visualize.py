@@ -1,6 +1,7 @@
 from collections import deque
 import re
 import struct
+import sys
 import time
 from typing import Iterable, Iterator, List
 
@@ -12,6 +13,8 @@ from scipy import signal
 import tkinter as tk
 import yaml
 
+# PYTHONPATH needs to be updated to allow stylegan2 imports
+sys.path.append("stylegan2")
 from stylegan2 import dnnlib
 import stylegan2.dnnlib.tflib as tflib
 from stylegan2 import pretrained_networks

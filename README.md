@@ -114,11 +114,6 @@ try one of the `config-e` or `config-f` networks in the
 [StyleGAN2 Google Drive](https://drive.google.com/drive/folders/1yanUI9m4b4PWzR0eurKNq6JR1Bbfbh6L).
 You can of course train your own.
 
-For the imports within the `stylegan2` submodule to work,
-you'll need to execute this command once before running the script.
-```.sh
-export PYTHONPATH=stylegan2
-```
 Along with the two positional arguments,
 you'll need to specify a periodogram algorithm using the `--periodogram` option.
 
